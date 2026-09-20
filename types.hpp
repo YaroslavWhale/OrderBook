@@ -21,7 +21,6 @@ struct Multipliers {
     uint64_t volume;
 };
 
-//&*#&?????
 struct DepthUpdate {
     uint64_t firstUpdateId;
     uint64_t finalUpdateId;

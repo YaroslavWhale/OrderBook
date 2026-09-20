@@ -11,6 +11,11 @@ uint64_t OrderBook::get_price_multiplier() const { return price_multiplier; }
 uint64_t OrderBook::get_volume_multiplier() const { return volume_multiplier; }
 bool OrderBook::is_initialized() const { return isInitialized; }
 
+uint64_t OrderBook::get_last_update_id() const {
+    std::lock_guard<std::mutex> lock(mtx);
+    return localLastUpdateId;
+}
+
 int64_t OrderBook::get_best_bid_price() const { return best_bid_price; }
 int64_t OrderBook::get_best_ask_price() const { return best_ask_price; }
 int64_t OrderBook::get_best_bid_volume() const { return best_bid_volume; }
@@ -34,7 +39,9 @@ void OrderBook::snapshot(const SnapshotData& snap) {
 void OrderBook::applyUpdate(const DepthUpdate& update) {
     std::lock_guard<std::mutex> lock(mtx);
     if (!isInitialized) return;
-    if (update.finalUpdateId <= snapshotLastUpdateId) return;
+
+    if (update.finalUpdateId <= localLastUpdateId) return;
+
     if (update.firstUpdateId > localLastUpdateId + 1) {
         throw std::runtime_error("Out of sync: need to re-snapshot");
     }
@@ -87,10 +94,10 @@ void OrderBook::removeLevel(std::vector<Level>& levels, uint64_t price) {
 
 std::vector<Level> OrderBook::get_bids() const {
     std::lock_guard<std::mutex> lock(mtx);
-    return bids; // копия
+    return bids;
 }
 
 std::vector<Level> OrderBook::get_asks() const {
     std::lock_guard<std::mutex> lock(mtx);
-    return asks; // копия
+    return asks;
 }

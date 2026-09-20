@@ -20,9 +20,9 @@ public:
     int64_t get_best_ask_volume() const;
     uint64_t get_price_multiplier() const;
     uint64_t get_volume_multiplier() const;
+    uint64_t get_last_update_id() const;
     bool is_initialized() const;
 
-    // Новые методы для получения копий уровней
     std::vector<Level> get_bids() const;
     std::vector<Level> get_asks() const;
 
