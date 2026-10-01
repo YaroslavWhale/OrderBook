@@ -117,19 +117,19 @@ yay -S cpr
 ```
 Или собрать из исходников.
 
-Сборка
+## Сборка
 ```bash
 g++ -std=c++17 -pthread \
     main.cpp OrderBook.cpp OrderBookClient.cpp TradingSystem.cpp \
     -o main \
     -lcpr -lboost_system -lssl -lcrypto
 ```
-Запуск
+## Запуск
 ```bash
 ./main -sym BTCUSDT -depth 10
 ```
 
-Пример вывода
+## Пример вывода
 ```text
 OrderBook is running. Press Ctrl+C to stop.
 
@@ -146,7 +146,7 @@ Best Ask: 8114237 Volume: 116520
 Best Bid: 8114236 Volume: 151667
 Best Ask: 8114237 Volume: 45242
 ```
-Потоки
+## Потоки
 
 В программе работают два потока.
 
