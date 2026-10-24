@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake: configure (clang)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S", "${workspaceFolder}",
+                "-B", "${workspaceFolder}/build",
+                "-DCMAKE_BUILD_TYPE=${input:buildType}",
+                "-DCMAKE_CXX_COMPILER=clang++",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "cmake: build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build",
+                "--parallel"
+            ],
+            "dependsOn": "cmake: configure (clang)",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "cmake: clean (rm -rf build)",
+            "type": "shell",
+            "command": "rm -rf ${workspaceFolder}/build",
+            "problemMatcher": []
+        },
+        {
+            "label": "build: clang++ one-liner",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-std=c++17", "-g", "-pthread",
+                "main.cpp", "OrderBook.cpp", "OrderBookClient.cpp", "TradingSystem.cpp",
+                "-o", "main",
+                "-lcpr", "-lboost_system", "-lssl", "-lcrypto"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/orderbook",
+            "args": ["-sym", "BTCUSDT", "-depth", "10"],
+            "dependsOn": "cmake: build",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "buildType",
+            "type": "pickString",
+            "description": "Тип сборки CMake",
+            "options": ["Debug", "Release", "RelWithDebInfo"],
+            "default": "Debug"
+        }
+    ]
+}

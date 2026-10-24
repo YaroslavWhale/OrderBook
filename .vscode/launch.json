@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug (LLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/orderbook",
+            "args": ["-sym", "BTCUSDT", "-depth", "10"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "preLaunchTask": "cmake: build"
+        },
+        {
+            "name": "Debug (gdb / cppdbg)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/orderbook",
+            "args": ["-sym", "BTCUSDT", "-depth", "10"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "MIMode": "gdb",
+            "preLaunchTask": "cmake: build"
+        }
+    ]
+}

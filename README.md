@@ -99,10 +99,13 @@ make && sudo make install
 ```
 Fedora / RHEL / CentOS
 
+> В репозиториях Fedora библиотека `nlohmann/json` называется **`json-devel`**
+> (пакета `nlohmann-json-devel` там нет). `cpr` доступен как `cpr-devel`.
+
 ```bash
-sudo dnf install -y cmake gcc-c++ \
-    boost-devel openssl-devel libcurl-devel \
-    nlohmann-json-devel websocketpp-devel
+sudo dnf install -y cmake make clang clang-tools-extra lldb gdb ninja-build \
+    boost-devel boost-system openssl-devel libcurl-devel \
+    json-devel websocketpp-devel cpr-devel
 ```
 
 Arch Linux
@@ -118,8 +121,23 @@ yay -S cpr
 Или собрать из исходников.
 
 ## Сборка
+
+### CMake (рекомендуется, используется в VS Code)
+
 ```bash
-g++ -std=c++17 -pthread \
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake --build build --parallel
+```
+
+Готовый бинарник: `build/orderbook`.
+В VS Code: `Ctrl+Shift+B` (задача `cmake: build`), отладка — `F5`.
+
+### Одной командой clang++
+
+```bash
+clang++ -std=c++17 -g -pthread \
     main.cpp OrderBook.cpp OrderBookClient.cpp TradingSystem.cpp \
     -o main \
     -lcpr -lboost_system -lssl -lcrypto
